@@ -1,0 +1,89 @@
+﻿@model Practica02NARA.Models.Pelicula
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Pelicula</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="NombrePelicula" class="control-label"></label>
+                <input asp-for="NombrePelicula" class="form-control" />
+                <span asp-validation-for="NombrePelicula" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Genero" class="control-label"></label>
+                <input asp-for="Genero" class="form-control" />
+                <span asp-validation-for="Genero" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AñoPublicada" class="control-label"></label>
+                <input asp-for="AñoPublicada" class="form-control" />
+                <span asp-validation-for="AñoPublicada" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImagenPelicula" class="control-label"></label>
+                <input type="file" id="fileImagen" asp-for="ImagenPelicula" class="form-control" onchange="mostrarVistaPrevia()" accept="image/*" />
+                <span asp-validation-for="ImagenPelicula" class="text-danger"></span>
+            </div>
+                         <div>
+                @{
+                    string urlBase64 = "";
+                    if (Model.ImagenPelicula != null && Model.ImagenPelicula.Length > 0)
+                    {
+                        string base64String = Convert.ToBase64String(Model.ImagenPelicula);
+                        urlBase64 = "data:image/jpeg;base64," + base64String;
+                    }
+                }
+                @if (urlBase64.Trim().Length > 0)
+                {
+                        <img id="imagenPrevia" src="@urlBase64" alt="Vista previa de la imagen" style="max-width: 200px; max-height: 200px;">
+                }
+                else
+                {
+                    <img id="imagenPrevia" src="~/Imagenes/Default.jpg" alt="Vista previa de la imagen" style="max-width: 200px; max-height: 200px;">
+                }
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DirectorPelicula" class="control-label"></label>
+                <select asp-for="DirectorPelicula" class="form-control" asp-items="ViewBag.DirectorPelicula"></select>
+                <span asp-validation-for="DirectorPelicula" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function mostrarVistaPrevia() {
+            var input = document.getElementById('fileImagen');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    document.getElementById('imagenPrevia').src = e.target.result;
+                }
+
+                reader.readAsDataURL(input.files[0]); // Convierte el archivo a una URL base64
+            }
+        }
+    </script>
+
+}

@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Practica02NARA.Models.Pelicula>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NombrePelicula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AñoPublicada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImagenPelicula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DirectorPeliculaNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombrePelicula)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AñoPublicada)
+                </td>
+                <td>
+                    @{
+                        string UrlBase64 = "";
+                        if (item.ImagenPelicula != null && item.ImagenPelicula.Length > 0)
+                        {
+                            string Base64 = Convert.ToBase64String(item.ImagenPelicula);
+                            UrlBase64 = "data:image/jpeg;base64," + Base64;
+
+                        }
+                        @if (UrlBase64.Trim().Length > 0)
+                        {
+                            <img id="imagenPrevia" src="@UrlBase64" alt="Vista previa de la imagen" style="max-width: 200px; max-height: 200px;">
+                            <br />
+                        }
+                        else
+                        {
+                            <img id="imagenPrevia" src="~/Imagenes/Default.jpg" alt="Vista previa de la imagen" style="max-width: 200px; max-height: 200px;">
+                        }
+
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DirectorPeliculaNavigation.NombreDirector)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

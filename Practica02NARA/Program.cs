@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Practica02NARA.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<Practica02NARABDContext>(options =>
+   options.UseSqlServer(builder.Configuration.GetConnectionString("Cadena_Conexion")));
+
 
 var app = builder.Build();
 
